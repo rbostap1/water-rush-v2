@@ -139,11 +139,48 @@ function updateGameTitleWithMode() {
   }
 }
 
+function getHighScoreKey() {
+  // High score per mode
+  return `waterRushHighScore_${currentMode}`;
+}
+
+function getHighScore() {
+  return parseInt(localStorage.getItem(getHighScoreKey()) || "0", 10);
+}
+
+function setHighScoreIfNeeded(newScore) {
+  const key = getHighScoreKey();
+  const prev = getHighScore();
+  if (newScore > prev) {
+    localStorage.setItem(key, newScore);
+    updateHighScoreDisplay();
+  }
+}
+
+function updateHighScoreDisplay() {
+  let area = document.getElementById('highScoreArea');
+  if (!area) {
+    area = document.createElement('div');
+    area.id = 'highScoreArea';
+    area.className = 'high-score-area';
+    // Insert after score badge if possible
+    const badge = document.querySelector('.score-badge');
+    if (badge && badge.parentNode) {
+      badge.parentNode.insertBefore(area, badge.nextSibling);
+    } else {
+      // fallback
+      document.body.insertBefore(area, document.body.firstChild);
+    }
+  }
+  area.innerHTML = `<span class="high-score-label">Highest Score:</span> <span class="high-score-value">${getHighScore()}</span>`;
+}
+
 function setMode(mode) {
   currentMode = mode;
   timeLeft = modeSettings[mode];
   updateTimerDisplay();
   updateGameTitleWithMode();
+  updateHighScoreDisplay();
 }
 
 function updateTimerDisplay() {
@@ -314,6 +351,7 @@ function resetGame() {
   updateTimerDisplay();
   updateQuestion();
   startTimer();
+  updateHighScoreDisplay();
 }
 
 function updateQuestion() {
@@ -322,6 +360,8 @@ function updateQuestion() {
     stopTimer();
     hideTimerDisplay();
     // Game over
+    setHighScoreIfNeeded(score);
+    // ...existing code...
     const maxScore = questions.length * 10;
     const percent = score / maxScore;
     const waterFill = document.getElementById("waterFill");
@@ -454,6 +494,7 @@ window.onload = function() {
   updateScoreDisplay("#00bfff");
   updateQuestion();
   startTimer();
+  updateHighScoreDisplay();
 
   // Show popup on page load
   const popup = document.getElementById("rulesPopup");
