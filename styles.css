@@ -661,3 +661,187 @@ hr {
   margin: 0 auto 12px auto;
   display: inline-block;
 }
+
+#changeModeBtn {
+  background: #ffd700;
+  color: #232526;
+  border: none;
+  border-radius: 18px;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 0.5em 1.2em;
+  cursor: pointer;
+  margin: 0 0 0 1em;
+  display: inline-block;
+  width: auto;
+  box-shadow: 0 2px 8px #00b4d822;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
+  vertical-align: middle;
+}
+#changeModeBtn:hover,
+#changeModeBtn:focus {
+  background: #ffb300;
+  color: #fff;
+  box-shadow: 0 4px 16px #ffd70055;
+  transform: scale(1.04);
+}
+
+/* Hide inline modeSelector if not in overlay */
+#modeSelector:not(.mode-overlay-content #modeSelector) {
+  display: none !important;
+}
+
+#glass-timer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 2px 8px #00b4d8, 0 0 2px #0008;
+  pointer-events: none;
+  user-select: none;
+  z-index: 10;
+  background: rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 0.1em 0.5em;
+  min-width: 60px;
+  letter-spacing: 1px;
+}
+
+#modeSelector {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin: 1em auto 0 auto;
+  padding: 0.5em 0;
+  z-index: 20;
+  position: relative;
+}
+
+#modeSelector .mode-btn {
+  font-size: 1em;
+  font-weight: bold;
+  border: none;
+  border-radius: 18px;
+  padding: 0.5em 1.2em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
+  box-shadow: 0 2px 8px #00b4d822;
+  outline: none;
+}
+
+#modeSelector .mode-btn[data-mode="easy"] {
+  background: #00e676;
+  color: #fff;
+}
+#modeSelector .mode-btn[data-mode="normal"] {
+  background: #00bfff;
+  color: #fff;
+}
+#modeSelector .mode-btn[data-mode="hard"] {
+  background: #ff1744;
+  color: #fff;
+}
+
+#modeSelector .mode-btn:active,
+#modeSelector .mode-btn:focus {
+  transform: scale(1.07);
+  box-shadow: 0 4px 16px #ffd70055;
+}
+
+.mode-overlay {
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(30, 32, 40, 0.55);
+  z-index: 3000;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.4s cubic-bezier(.4,2,.6,1);
+  backdrop-filter: blur(2.5px) brightness(0.95);
+}
+.mode-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.mode-overlay-content {
+  background: linear-gradient(120deg, #fffbe7 60%, #ffe066 100%);
+  border-radius: 22px;
+  padding: 2.2rem 1.7rem;
+  max-width: 340px;
+  width: 92vw;
+  box-shadow: 0 8px 32px 0 #ffd70055, 0 2px 12px #ffb30022;
+  text-align: center;
+  position: relative;
+  border: 3px solid #ffd700;
+  animation: bounceIn 0.7s;
+}
+.mode-overlay-content h3 {
+  margin-top: 0;
+  color: #ff6f00;
+  font-size: 1.3rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px #fff8, 0 0 2px #ffd700;
+}
+#modeOverlaySelector {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin: 1em auto 0 auto;
+  padding: 0.5em 0;
+  z-index: 20;
+  position: relative;
+}
+#modeOverlaySelector .mode-btn {
+  font-size: 1em;
+  font-weight: bold;
+  border: none;
+  border-radius: 18px;
+  padding: 0.5em 1.2em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
+  box-shadow: 0 2px 8px #00b4d822;
+  outline: none;
+}
+#modeOverlaySelector .mode-btn[data-mode="easy"] {
+  background: #00e676;
+  color: #fff;
+}
+#modeOverlaySelector .mode-btn[data-mode="normal"] {
+  background: #00bfff;
+  color: #fff;
+}
+#modeOverlaySelector .mode-btn[data-mode="hard"] {
+  background: #ff1744;
+  color: #fff;
+}
+#modeOverlaySelector .mode-btn:active,
+#modeOverlaySelector .mode-btn:focus {
+  transform: scale(1.07);
+  box-shadow: 0 4px 16px #ffd70055;
+}
+#closeModeOverlayBtn {
+  background: #ffd700;
+  color: #232526;
+  border: none;
+  border-radius: 14px;
+  padding: 0.6em 1.5em;
+  font-size: 1.1em;
+  cursor: pointer;
+  margin-top: 1.5em;
+  box-shadow: 0 2px 8px #ffd70033;
+  font-weight: bold;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
+  letter-spacing: 1px;
+}
+#closeModeOverlayBtn:hover {
+  background: #ffb300;
+  color: #fff;
+  box-shadow: 0 4px 16px #ffd70055;
+  transform: translateY(-2px) scale(1.04);
+}

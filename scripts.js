@@ -105,9 +105,207 @@ function showWinMessage() {
   }
 }
 
+let timerInterval = null;
+let timeLeft = 60; // default for normal mode
+let currentMode = "normal"; // "easy", "normal", "hard"
+
+const modeSettings = {
+  easy: 90,
+  normal: 60,
+  hard: 30
+};
+
+function getModeLabel(mode) {
+  const modeLabels = { easy: "Easy", normal: "Normal", hard: "Hard" };
+  return modeLabels[mode] || "";
+}
+
+function updateGameTitleWithMode() {
+  // Try to find h1 or .game-title
+  let title = document.querySelector('h1') || document.querySelector('.game-title');
+  if (title) {
+    // Remove any previous mode label
+    let modeSpan = title.querySelector('.mode-label');
+    if (!modeSpan) {
+      modeSpan = document.createElement('span');
+      modeSpan.className = 'mode-label';
+      modeSpan.style.fontSize = '1rem';
+      modeSpan.style.fontWeight = 'normal';
+      modeSpan.style.marginLeft = '0.7em';
+      modeSpan.style.color = '#00bfff';
+      title.appendChild(modeSpan);
+    }
+    modeSpan.textContent = `Mode: ${getModeLabel(currentMode)}`;
+  }
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  timeLeft = modeSettings[mode];
+  updateTimerDisplay();
+  updateGameTitleWithMode();
+}
+
+function updateTimerDisplay() {
+  let timerEl = document.getElementById('glass-timer');
+  if (!timerEl) {
+    // Create timer element inside glass-outer if not present
+    const glassOuter = document.querySelector('.glass-outer');
+    if (glassOuter) {
+      timerEl = document.createElement('div');
+      timerEl.id = 'glass-timer';
+      timerEl.style.position = 'absolute';
+      timerEl.style.top = '50%';
+      timerEl.style.left = '50%';
+      timerEl.style.transform = 'translate(-50%, -50%)';
+      timerEl.style.fontSize = '1.6rem';
+      timerEl.style.fontWeight = 'bold';
+      timerEl.style.color = '#fff';
+      timerEl.style.textShadow = '0 2px 8px #00b4d8, 0 0 2px #0008';
+      timerEl.style.pointerEvents = 'none';
+      timerEl.style.userSelect = 'none';
+      timerEl.style.zIndex = '10';
+      glassOuter.style.position = 'relative';
+      glassOuter.appendChild(timerEl);
+    }
+  }
+  if (timerEl) {
+    const min = Math.floor(timeLeft / 60);
+    const sec = timeLeft % 60;
+    timerEl.textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+    timerEl.style.display = 'block';
+  }
+}
+
+function hideTimerDisplay() {
+  const timerEl = document.getElementById('glass-timer');
+  if (timerEl) timerEl.style.display = 'none';
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      endGameOnTimeout();
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+function endGameOnTimeout() {
+  hideQASection();
+  hideWinMessage();
+  hideTimerDisplay();
+  showEndMessage("Time's up! Try again.", "#e53935");
+}
+
+function createModeButtons(containerId, onSelect) {
+  const modes = [
+    { mode: "easy", label: "Easy", color: "#00e676" },
+    { mode: "normal", label: "Normal", color: "#00bfff" },
+    { mode: "hard", label: "Hard", color: "#ff1744" }
+  ];
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = "";
+  modes.forEach(({ mode, label, color }) => {
+    const btn = document.createElement('button');
+    btn.className = 'mode-btn';
+    btn.dataset.mode = mode;
+    btn.textContent = label;
+    btn.style.background = color;
+    btn.style.color = "#fff";
+    btn.onclick = () => onSelect(mode);
+    container.appendChild(btn);
+  });
+}
+
+function showModeSelector() {
+  let modeSel = document.getElementById('modeSelector');
+  if (!modeSel) {
+    modeSel = document.createElement('div');
+    modeSel.id = 'modeSelector';
+    modeSel.style.display = 'flex';
+    modeSel.style.justifyContent = 'center';
+    modeSel.style.gap = '1em';
+    modeSel.style.margin = '1em auto 0 auto';
+    modeSel.style.padding = '0.5em 0';
+    modeSel.style.zIndex = '20';
+    modeSel.style.position = 'relative';
+    // Use helper to create buttons
+    document.body.appendChild(modeSel);
+    createModeButtons('modeSelector', (mode) => {
+      setMode(mode);
+      resetGame();
+    });
+    // Move to container if needed
+    const container = document.querySelector('.container');
+    if (container && modeSel.parentNode !== container) {
+      container.insertBefore(modeSel, container.firstChild);
+    }
+  }
+}
+
+function showModeOverlay() {
+  let overlay = document.getElementById('modeOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'modeOverlay';
+    overlay.className = 'mode-overlay';
+    overlay.innerHTML = `
+      <div class="mode-overlay-content">
+        <h3>Select Game Mode</h3>
+        <div id="modeOverlaySelector"></div>
+        <button id="closeModeOverlayBtn" style="margin-top:1.5em;">Cancel</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    createModeButtons('modeOverlaySelector', (mode) => {
+      setMode(mode);
+      hideModeOverlay();
+      resetGame();
+    });
+    document.getElementById('closeModeOverlayBtn').onclick = hideModeOverlay;
+  }
+  overlay.classList.add('active');
+}
+
+function hideModeOverlay() {
+  const overlay = document.getElementById('modeOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
+function resetGame() {
+  score = 0;
+  currentQuestion = 0;
+  shuffleQuestions(questions);
+  updateScoreDisplay("#00bfff");
+  updateWater(0, "#00bfff");
+  // Restore question and answer section
+  const questionSection = document.querySelector('.question');
+  const instruction = document.querySelector('.instruction');
+  if (questionSection) questionSection.style.display = '';
+  if (instruction) instruction.style.display = '';
+  hideWinMessage();
+  hideTimerDisplay();
+  timeLeft = modeSettings[currentMode];
+  updateTimerDisplay();
+  updateQuestion();
+  startTimer();
+}
+
 function updateQuestion() {
   const questionText = document.getElementById("questionText");
   if (currentQuestion >= questions.length) {
+    stopTimer();
+    hideTimerDisplay();
     // Game over
     const maxScore = questions.length * 10;
     const percent = score / maxScore;
@@ -194,25 +392,53 @@ function shuffleQuestions(arr) {
 }
 
 document.getElementById("resetBtn").onclick = function () {
-  score = 0;
-  currentQuestion = 0;
-  shuffleQuestions(questions);
-  updateScoreDisplay("#00bfff");
-  updateWater(0, "#00bfff");
-  // Restore question and answer section
-  const questionSection = document.querySelector('.question');
-  const instruction = document.querySelector('.instruction');
-  if (questionSection) questionSection.style.display = '';
-  if (instruction) instruction.style.display = '';
-  hideWinMessage();
-  updateQuestion();
+  resetGame();
 };
 
+// Remove inline mode selector from top if present
+function removeInlineModeSelector() {
+  const modeSel = document.getElementById('modeSelector');
+  if (modeSel && !modeSel.closest('.mode-overlay-content')) {
+    modeSel.remove();
+  }
+}
+
+// Place Change Mode button next to DisplayRules
+function addChangeModeBtn() {
+  let btn = document.getElementById('changeModeBtn');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'changeModeBtn';
+    btn.textContent = 'Change Mode';
+    btn.type = 'button';
+    btn.onclick = showModeOverlay;
+    // Place next to #rulesBtn
+    const rulesBtn = document.getElementById('rulesBtn');
+    if (rulesBtn && rulesBtn.parentNode) {
+      rulesBtn.parentNode.insertBefore(btn, rulesBtn.nextSibling);
+      btn.style.display = 'inline-block';
+      btn.style.marginLeft = '1em';
+      btn.style.marginRight = '0';
+      btn.style.width = 'auto';
+      btn.style.verticalAlign = 'middle';
+    } else {
+      // fallback
+      const container = document.querySelector('.container') || document.body;
+      container.insertBefore(btn, container.firstChild.nextSibling);
+    }
+  }
+}
+
 window.onload = function() {
+  removeInlineModeSelector();
+  addChangeModeBtn();
+  setMode("normal");
+  updateGameTitleWithMode();
   shuffleQuestions(questions);
   updateWater(0, "#00bfff");
   updateScoreDisplay("#00bfff");
   updateQuestion();
+  startTimer();
 
   // Show popup on page load
   const popup = document.getElementById("rulesPopup");
