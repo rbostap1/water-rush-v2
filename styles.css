@@ -1,5 +1,9 @@
+/* Charity: Water uses 'Montserrat', 'Open Sans', or similar clean sans-serif fonts */
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Montserrat', 'Open Sans', Arial, Helvetica, sans-serif;
   background-size: 1200% 1200%;
   animation: gradientBG 18s ease infinite;
   margin: 0;
@@ -74,20 +78,49 @@ body {
   }
   .main-content, .side-content {
     padding: 0 2vw;
+    min-width: 0;
+    max-width: 100vw;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .glass-svg {
-    width: 120px !important;
-    height: 240px !important;
-    max-width: 98vw;
-    max-height: 50vw;
+    width: 90vw !important;
+    max-width: 180px;
+    height: 38vw !important;
+    max-height: 220px;
+    min-width: 80px;
+    min-height: 120px;
   }
   .glass-outer {
     min-height: 120px;
-    max-height: 260px;
+    max-height: 220px;
+    height: auto;
+    margin-bottom: 1.2rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
   }
   .score-badge {
     font-size: 1rem;
     padding: 0.2em 0.5em;
+    margin-bottom: 1em;
+  }
+  .question {
+    max-width: 98vw;
+    font-size: 1.08rem;
+    padding: 1.1em 0.7em 1.5em 0.7em;
+    margin: 1.2em auto 1em auto;
+  }
+  .question p {
+    font-size: 1.1em;
+  }
+  .footer {
+    font-size: 0.98em;
+    padding: 0.7em 0 0.7em 0;
   }
 }
 
@@ -98,8 +131,8 @@ body {
     text-align: center;
   }
   .logo {
-    height: 54px;
-    margin-bottom: 18px;
+    height: 44px;
+    margin-bottom: 14px;
     max-width: 98vw;
   }
   .main-content, .side-content {
@@ -110,12 +143,15 @@ body {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    max-width: 100vw;
+    width: 100%;
   }
   .glass-outer {
-    height: 180px;
-    min-height: 100px;
-    max-height: 220px;
-    margin-bottom: 1rem;
+    height: 140px;
+    min-height: 90px;
+    max-height: 180px;
+    margin-bottom: 0.7rem;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -123,20 +159,21 @@ body {
   .glass-svg {
     width: 90vw !important;
     height: 38vw !important;
-    min-width: 90px;
-    min-height: 120px;
-    max-width: 120px;
-    max-height: 240px;
+    min-width: 60px;
+    min-height: 90px;
+    max-width: 100px;
+    max-height: 180px;
     margin: 0 auto;
     display: block;
   }
   .score-badge {
-    font-size: 0.98rem;
-    padding: 0.18em 0.5em;
+    font-size: 0.92rem;
+    padding: 0.14em 0.4em;
     margin-left: auto;
     margin-right: auto;
     display: block;
     text-align: center;
+    margin-bottom: 0.7em;
   }
   .rules-content {
     padding: 1.2rem 0.7rem;
@@ -194,22 +231,30 @@ body {
     margin-left: auto;
     margin-right: auto;
   }
+  .footer {
+    font-size: 0.92em;
+    padding: 0.5em 0 0.5em 0;
+  }
 }
 
 @media (max-width: 350px) {
   .logo {
-    height: 36px;
-    margin-bottom: 10px;
+    height: 32px;
+    margin-bottom: 8px;
   }
   .glass-svg {
-    min-width: 60px;
-    min-height: 80px;
+    min-width: 40px;
+    min-height: 50px;
     max-width: 80vw;
-    max-height: 120px;
+    max-height: 80px;
   }
   .score-badge {
-    font-size: 0.85rem;
-    padding: 0.1em 0.2em;
+    font-size: 0.8rem;
+    padding: 0.08em 0.15em;
+  }
+  .footer {
+    font-size: 0.85em;
+    padding: 0.3em 0 0.3em 0;
   }
 }
 
@@ -233,6 +278,19 @@ button,
   display: block;
   width: 70%;
   transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+button:hover,
+#rulesBtn:hover,
+.answer:hover,
+#resetBtn:hover,
+.rules-content button:hover,
+.mode-btn:hover,
+.mode-btn:focus {
+  background: #ffb300;
+  color: #fff;
+  box-shadow: 0 4px 16px #ffd70055;
+  transform: scale(1.04);
 }
 
 #rulesBtn, .answer {
@@ -651,45 +709,69 @@ hr {
   display: none !important;
 }
 
-#rulesBtn {
-  width: 120px !important;
-  min-width: 200px;
-  max-width: 250px;
-  font-size: 0.95em;
-  padding: 8px 12px;
-  border-radius: 18px;
-  margin: 0 auto 12px auto;
-  display: inline-block;
-}
-
+#rulesBtn,
 #changeModeBtn {
-  background: #ffd700;
-  color: #232526;
-  border: none;
-  border-radius: 18px;
+  width: 48%;
+  min-width: 120px;
+  max-width: 250px;
   font-size: 1em;
-  font-weight: bold;
-  padding: 0.5em 1.2em;
-  cursor: pointer;
-  margin: 0 0 0 1em;
+  padding: 10px 0;
+  border-radius: 18px;
+  margin: 0;
   display: inline-block;
-  width: auto;
-  box-shadow: 0 2px 8px #00b4d822;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.1s;
   vertical-align: middle;
-}
-#changeModeBtn:hover,
-#changeModeBtn:focus {
-  background: #ffb300;
-  color: #fff;
-  box-shadow: 0 4px 16px #ffd70055;
-  transform: scale(1.04);
+  box-sizing: border-box;
+  text-align: center;
 }
 
-/* Hide inline modeSelector if not in overlay */
-#modeSelector:not(.mode-overlay-content #modeSelector) {
-  display: none !important;
+.rules-mode-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  gap: 4%;
+  margin: 0 auto 18px auto;
+  width: 100%;
+  max-width: 520px;
 }
+
+@media (max-width: 700px) {
+  .rules-mode-row {
+    max-width: 98vw;
+    gap: 2vw;
+  }
+  #rulesBtn,
+  #changeModeBtn {
+    min-width: 90px;
+    max-width: 98vw;
+    font-size: 0.98em;
+    padding: 9px 0;
+  }
+}
+
+@media (max-width: 500px) {
+  .rules-mode-row {
+    max-width: 100vw;
+    gap: 2vw;
+  }
+  #rulesBtn,
+  #changeModeBtn {
+    min-width: 70px;
+    max-width: 100vw;
+    font-size: 0.97em;
+    padding: 8px 0;
+  }
+}
+
+@media (max-width: 350px) {
+  #rulesBtn,
+  #changeModeBtn {
+    font-size: 0.92em;
+    padding: 6px 0;
+  }
+}
+
+/* ...existing code... */
 
 #glass-timer {
   position: absolute;
@@ -844,4 +926,27 @@ hr {
   color: #fff;
   box-shadow: 0 4px 16px #ffd70055;
   transform: translateY(-2px) scale(1.04);
+}
+
+.footer {
+  width: 100%;
+  margin-top: 2.5em;
+  padding: 1.2em 0 1.2em 0;
+  background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
+  color: #232526;
+  font-size: 1.08em;
+  text-align: center;
+  border-top: 2px solid #ffd700;
+  box-shadow: 0 -2px 12px #00b4d822;
+  letter-spacing: 0.5px;
+}
+.footer a {
+  color: #00b4d8;
+  text-decoration: underline;
+  font-weight: bold;
+  transition: color 0.2s;
+}
+.footer a:hover {
+  color: #ffb300;
+  text-decoration: underline;
 }
