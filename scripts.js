@@ -203,7 +203,22 @@ function endGameOnTimeout() {
   hideQASection();
   hideWinMessage();
   hideTimerDisplay();
-  showEndMessage("Time's up! Try again.", "#e53935");
+  // Show message based on score
+  const maxScore = questions.length * 10;
+  const percent = score / maxScore;
+  const waterFill = document.getElementById("waterFill");
+  const waterColor = waterFill ? waterFill.getAttribute("fill") : "";
+  if (percent >= 0.6 && waterColor === "#00bfff") {
+    showEndMessage("Time's up! You did great, but try to be quicker!", "#00b4d8");
+  } else if (percent < 0.6 && waterColor === "#00bfff") {
+    showEndMessage("Time's up! Keep practicing and you'll improve!", "#ff9800");
+  } else if (percent < 0.6 && waterColor === "#00ff66") {
+    showEndMessage("Time's up! Uh No! Try again.", "#e53935");
+  } else if (percent >= 0.6 && waterColor === "#00ff66") {
+    showEndMessage("Time's up! So close, try again!", "#ffb300");
+  } else {
+    showEndMessage("Time's up! Try again.", "#e53935");
+  }
 }
 
 function createModeButtons(containerId, onSelect) {
