@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Water Rush</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 logo-center">
+        <img src="Assets/cw_Brand-UsageGuide.pdf.png" alt="charity: water logo" class="logo">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4 side-content">
+        <!-- Water drop score display (drop only, no score text) -->
+        <div class="water-drop-score">
+          <svg id="scoreDropSvg" viewBox="0 0 48 60">
+            <path id="scoreDropPath" d="M24 6 C14 26, 4 36, 24 56 C44 36, 34 26, 24 6 Z" fill="#00bfff"/>
+          </svg>
+        </div>
+        <div class="glass-outer">
+          <svg class="glass-svg" viewBox="0 0 80 160" width="80" height="160">
+            <rect x="4" y="18" width="72" height="130" fill="#e0f7fa" stroke="#00b4d8" stroke-width="4"/>
+            <ellipse cx="40" cy="148" rx="36" ry="5" fill="#e0f7fa" stroke="#00b4d8" stroke-width="4"/>
+            <g id="waterGroup">
+              <clipPath id="waterClip">
+                <rect id="waterRect" x="4" y="18" width="72" height="130" rx="10" ry="10"/>
+              </clipPath>
+              <ellipse id="waterEllipse" cx="40" cy="148" rx="50" ry="10" fill="#00bfff" clip-path="url(#waterClip)" opacity="0.7"/>
+              <rect id="waterFill" x="4" y="160" width="72" height="0" fill="#00bfff" clip-path="url(#waterClip)" opacity="0.7"/>
+            </g>
+          </svg>
+        </div>
+        <div class="score-badge">Score: <span id="score">0</span></div>
+      </div>
+      <div class="col-8 main-content">
+        <h1 class="title">Water <span class="rush">Rush</span></h1>
+        <div class="rules-toggle-row">
+          <button id="rulesBtn">Display Rules</button>
+          <button id="darkModeToggle">Toggle Dark Mode</button>
+        </div>
+        <p class="instruction">Answer correctly to fill glass with fresh water.</p>
+        <hr>
+        <div class="question">
+          <p id="questionText">Water is everywhere?</p>
+          <button class="answer" onclick="submitAnswer(true)">True</button>
+          <button class="answer" onclick="submitAnswer(false)">False</button>
+        </div>
+        <button id="resetBtn">Reset Game</button>
+      </div>
+    </div>
+    <div class="rules-popup" id="rulesPopup">
+      <div class="rules-content">
+        <h3>How to Play Water Rush</h3>
+        <ul>
+          <li>Test your knowledge about water care and facts!</li>
+          <li>Answer each true/false question by clicking the correct button.</li>
+          <li>Each correct answer fills the glass with <b style="color:#00bfff;">blue water (fresh water)</b> and gives you <b>10 points</b>.</li>
+          <li>Each incorrect answer fills the glass with <b style="color:#00ff66;">green water (dirty water)</b> and subtracts <b>10 points</b> (score can't go below 0).</li>
+          <li>If you score 60% or higher with blue water (fresh water), you'll win and see a celebration!</li>
+          <li>Click "Reset Game" to play again.</li>
+        </ul>
+        <button id="closeRulesBtn">Let's Play!</button>
+      </div>
+    </div>
+  </div>
+  <script src="scripts.js"></script>
+</body>
+</html>
